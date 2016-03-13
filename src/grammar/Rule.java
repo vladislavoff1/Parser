@@ -10,26 +10,32 @@ import java.util.List;
 public class Rule {
 
     private String name;
-    private List<Expression> expressions;
+    private List<Term> terms;
 
     public Rule(String name) {
         this.name = name;
-        expressions = new ArrayList<>();
+        terms = new ArrayList<>();
+    }
+
+    public Rule(String name, List<Term> terms) {
+        this.name = name;
+        this.terms = terms;
     }
 
     public String getName() {
         return name;
     }
 
-    public void addExpression(Expression expression) {
-        expressions.add(expression);
-    }
-    public void addExpression(Collection<Expression> expressions) {
-        this.expressions.addAll(expressions);
+    public Term[] getTerms() {
+        return (Term[]) terms.toArray();
     }
 
-    public Expression[] getExpressions() {
-        return (Expression[]) expressions.toArray();
+    public void addTerm(Term term) {
+        terms.add(term);
+    }
+
+    public void addTerm(Collection<Term> terms) {
+        this.terms.addAll(terms);
     }
 
     public String toString() {
@@ -39,16 +45,12 @@ public class Rule {
         stringBuilder.append(name);
         stringBuilder.append("> ::= ");
 
-        boolean first = true;
-        for (Expression e : expressions) {
-            if (!first) {
-                stringBuilder.append(" | ");
-            } else {
-                first = false;
-            }
-
-            stringBuilder.append(e.toString());
+        for (Term term : terms) {
+            stringBuilder.append(term);
+            stringBuilder.append(" ");
         }
+
+        stringBuilder.deleteCharAt(stringBuilder.length() - 1);
 
         return stringBuilder.toString();
     }

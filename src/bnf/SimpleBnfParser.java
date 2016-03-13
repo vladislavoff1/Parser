@@ -1,6 +1,5 @@
 package bnf;
 
-import grammar.Expression;
 import grammar.Grammar;
 import grammar.Rule;
 import grammar.Term;
@@ -32,8 +31,8 @@ public class SimpleBnfParser {
 
         for (String stmnt : statements) {
             SimpleBnfParser simpleBnfParser = new SimpleBnfParser(stmnt);
-            Rule rule = simpleBnfParser.rule();
-            rules.add(rule);
+            List<Rule> rule = simpleBnfParser.rule();
+            rules.addAll(rule);
         }
 
         return new Grammar(rules);
@@ -42,50 +41,53 @@ public class SimpleBnfParser {
 
     // <opt-whitespace> "<" <rule-name> ">" <opt-whitespace> "::=" <opt-whitespace> <expression> <line-end>
 
-    private Rule rule() {
+    private List<Rule> rule() {
         if (debug)
             System.out.println("rule: " + position + " '" + statement.charAt(position) + "'.");
         // Rule name
         skipWhitespaces();
 
-        String name = getTextBetween('<', '>');
-        Rule rule = new Rule(name);
+        List<Rule> rules = new ArrayList<>();
+
+        String ruleName = getTextBetween('<', '>');
 
         skipWhitespaces();
 
         match("::=");
         skipWhitespaces();
 
-        rule.addExpression(list());
+        rules.addAll(list(ruleName));
 
-        return rule;
+        return rules;
     }
 
     // <list> | <list> <opt-whitespace> "|" <opt-whitespace> <expression>
-    private List<Expression> list() {
+    private List<Rule> list(String name) {
         if (debug)
             System.out.println("list: " + position + " '" + statement.charAt(position) + "'.");
-        List<Expression> expressions = new ArrayList<>();
-        expressions.add(expression());
+        List<Rule> expressions = new ArrayList<>();
+        expressions.add(new Rule(name, expression()));
+
         skipWhitespaces();
         while (hasNext() && statement.charAt(position) == '|') {
             next();
             skipWhitespaces();
-            expressions.add(expression());
+            expressions.add(new Rule(name, expression()));
             skipWhitespaces();
         }
         return expressions;
     }
 
     // <term> | <term> <opt-whitespace> <expression>
-    private Expression expression() {
+    private List<Term> expression() {
         if (debug)
             System.out.println("expression: " + position + " '" + statement.charAt(position) + "'.");
-        Expression expression = new Expression(term());
+        List<Term> expression = new ArrayList<>();
+        expression.add(term());
 
         skipWhitespaces();
         while (hasNext() && statement.charAt(position) != '|') {
-            expression.addTerm(term());
+            expression.add(term());
             skipWhitespaces();
         }
 

@@ -5,11 +5,11 @@ package grammar;
  */
 public class Term {
 
-    private String text;
-    private Boolean isRule = false;
+    private String value;
+    private boolean isRule = false;
 
-    private Term(String str, Boolean isRule) {
-        this.text = str;
+    private Term(String str, boolean isRule) {
+        this.value = str;
         this.isRule = isRule;
     }
 
@@ -31,7 +31,7 @@ public class Term {
             begin = '<';
             end = '>';
         } else {
-            if (text.indexOf('"') >= 0) {
+            if (value.indexOf('"') >= 0) {
                 begin = end = '\'';
             } else {
                 begin = end = '"';
@@ -39,9 +39,17 @@ public class Term {
         }
 
         stringBuilder.append(begin);
-        stringBuilder.append(text);
+        stringBuilder.append(value);
         stringBuilder.append(end);
 
         return stringBuilder.toString();
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public boolean isRule() {
+        return isRule;
     }
 }
