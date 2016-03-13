@@ -105,11 +105,13 @@ public class SimpleBnfParser {
         switch (current) {
             case '<':
                 terms.add(Term.createRuleTerm(getTextBetween('<', '>')));
+                break;
             default:
                 String text = literal();
                 for (int i = 0; i < text.length(); i++) {
                     terms.add(Term.createTextTerm(text.charAt(i)));
                 }
+                break;
         }
 
         return terms;
