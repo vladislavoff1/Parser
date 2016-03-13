@@ -17,6 +17,10 @@ public class Term {
         return new Term(text, false);
     }
 
+    public static Term createTextTerm(char text) {
+        return new Term(text + "", false);
+    }
+
     public static Term createRuleTerm(String rule) {
         return new Term(rule, true);
     }

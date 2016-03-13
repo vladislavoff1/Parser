@@ -83,11 +83,11 @@ public class SimpleBnfParser {
         if (debug)
             System.out.println("expression: " + position + " '" + statement.charAt(position) + "'.");
         List<Term> expression = new ArrayList<>();
-        expression.add(term());
+        expression.addAll(term());
 
         skipWhitespaces();
         while (hasNext() && statement.charAt(position) != '|') {
-            expression.add(term());
+            expression.addAll(term());
             skipWhitespaces();
         }
 
@@ -95,17 +95,24 @@ public class SimpleBnfParser {
     }
 
     // <literal> | "<" <rule-name> ">"
-    private Term term() {
+    private List<Term> term() {
         if (debug)
             System.out.println("term: " + position + " '" + statement.charAt(position) + "'.");
         char current = statement.charAt(position);
 
+        List<Term> terms = new ArrayList<>();
+
         switch (current) {
             case '<':
-                return Term.createRuleTerm(getTextBetween('<', '>'));
+                terms.add(Term.createRuleTerm(getTextBetween('<', '>')));
             default:
-                return Term.createTextTerm(literal());
+                String text = literal();
+                for (int i = 0; i < text.length(); i++) {
+                    terms.add(Term.createTextTerm(text.charAt(i)));
+                }
         }
+
+        return terms;
     }
 
     // '"' <text> '"' | "'" <text> "'"
