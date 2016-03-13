@@ -27,7 +27,8 @@ public class Rule {
     }
 
     public Term[] getTerms() {
-        return (Term[]) terms.toArray();
+        Term[] array = new Term[terms.size()];
+        return terms.toArray(array);
     }
 
     public void addTerm(Term term) {
@@ -51,6 +52,29 @@ public class Rule {
         }
 
         stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+
+        return stringBuilder.toString();
+    }
+
+    public String toString(int position) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append("<");
+        stringBuilder.append(name);
+        stringBuilder.append("> ::=");
+
+        for (Term term : terms) {
+            if (position == 0) {
+                stringBuilder.append(" •");
+            }
+            position--;
+            stringBuilder.append(" ");
+            stringBuilder.append(term);
+        }
+
+        if (position == 0) {
+            stringBuilder.append(" •");
+        }
 
         return stringBuilder.toString();
     }
