@@ -76,6 +76,7 @@ public class EarleyParser extends AbstractParser {
 
     private void scanner(State state, int origin) {
         char next = state.nextTerm().getValue().charAt(0);
+        
         if (next == statement.charAt(origin)) {
             ParserTree tree = new ParserTree(state.tree);
             tree.addChild(new ParserTree(next + "", true));
@@ -86,7 +87,8 @@ public class EarleyParser extends AbstractParser {
     private void completer(State state, int origin) {
         String ruleName = state.rule.getName();
 
-        for (State s : states.get(state.origin)) {
+        for (int i = 0; i < states.get(state.origin).size(); i++) {
+            State s = states.get(state.origin).get(i);
             if (s.isComplete()) {
                 continue;
             }

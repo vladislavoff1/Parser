@@ -1,7 +1,10 @@
 package main;
 
 import bnf.SimpleBnfParser;
+import files.*;
 import grammar.Grammar;
+import grammar.Rule;
+import grammar.Term;
 import parser.AbstractParser;
 import parser.EarleyParser;
 import parser.ParserTree;
@@ -17,20 +20,9 @@ import java.nio.file.Paths;
  */
 public class Main {
 
-    public static void main(String... args) {
+    public static void main(String... args) throws IOException {
 
-        StringBuilder stringBuilder = new StringBuilder();
-
-        Path path = Paths.get("resources/semantics.bnf");
-
-        try (FileReader fileReader = new FileReader(path.toFile())) {
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-            bufferedReader.lines().forEachOrdered((s) -> stringBuilder.append(s).append("\n"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        String inp = stringBuilder.toString();
+        String inp = FileSystem.readFile("resources/semantics.bnf");
 
         System.out.println("Semantic: ");
         System.out.println(inp);
@@ -39,20 +31,11 @@ public class Main {
         System.out.println("Parsed semantic: ");
 
         Grammar grammar = SimpleBnfParser.parse(inp);
+        addBasicRules(grammar);
         System.out.println(grammar);
 
-        StringBuilder stringBuilder2 = new StringBuilder();
-        Path path2 = Paths.get("resources/input.txt");
 
-        try (FileReader fileReader = new FileReader(path2.toFile())) {
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-            bufferedReader.lines().forEachOrdered((s) -> stringBuilder2.append(s).append("\n"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        stringBuilder2.deleteCharAt(stringBuilder2.length() - 1);
-        inp = stringBuilder2.toString();
+        inp = FileSystem.readFile("resources/input.txt");
         System.out.println();
         System.out.println("Input: \n" + inp);
 
@@ -62,6 +45,15 @@ public class Main {
         System.out.println();
         System.out.println("Result: ");
         System.out.println(tree);
+    }
+
+    private static void addBasicRules(Grammar grammar) {
+        Rule eol = new Rule("EOL");
+        char[] eolTerms = System.getProperty("line.separator").toCharArray();
+        for (char c : eolTerms) {
+            eol.addTerm(Term.createTextTerm(c));
+        }
+        grammar.addRule(eol);
     }
 
 }

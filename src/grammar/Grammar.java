@@ -32,6 +32,9 @@ public class Grammar {
     public void setRules(List<Rule> rules) {
         this.rules = rules;
     }
+    public void addRule(Rule rule) {
+        this.rules.add(rule);
+    }
 
     public List<Rule> getRulesByName(String name) {
         return rules.stream()
