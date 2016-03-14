@@ -1,6 +1,6 @@
-package parser;
+package com.romanov_v.parser;
 
-import grammar.Grammar;
+import com.romanov_v.parser.grammar.Grammar;
 
 /**
  * Created by vlad on 12/03/16.

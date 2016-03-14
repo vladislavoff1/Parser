@@ -1,4 +1,4 @@
-package parser;
+package com.romanov_v.parser;
 
 import java.util.ArrayList;
 import java.util.List;

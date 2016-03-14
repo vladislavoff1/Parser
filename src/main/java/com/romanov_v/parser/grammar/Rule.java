@@ -1,4 +1,4 @@
-package grammar;
+package com.romanov_v.parser.grammar;
 
 import java.util.ArrayList;
 import java.util.Collection;

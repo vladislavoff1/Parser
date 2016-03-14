@@ -1,8 +1,8 @@
-package parser;
+package com.romanov_v.parser;
 
-import grammar.Grammar;
-import grammar.Rule;
-import grammar.Term;
+import com.romanov_v.parser.grammar.Grammar;
+import com.romanov_v.parser.grammar.Rule;
+import com.romanov_v.parser.grammar.Term;
 
 import java.util.ArrayList;
 import java.util.HashSet;

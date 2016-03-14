@@ -1,17 +1,14 @@
 package main;
 
-import bnf.SimpleBnfParser;
-import files.*;
-import grammar.Grammar;
-import grammar.Rule;
-import grammar.Term;
-import parser.AbstractParser;
-import parser.EarleyParser;
-import parser.ParserTree;
+import com.romanov_v.parser.AbstractParser;
+import com.romanov_v.parser.EarleyParser;
+import com.romanov_v.parser.ParserTree;
+import com.romanov_v.parser.SimpleBnfParser;
+import com.romanov_v.parser.grammar.Grammar;
+import com.romanov_v.parser.grammar.Rule;
+import com.romanov_v.parser.grammar.Term;
 
 import java.io.*;
-import java.nio.Buffer;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -22,7 +19,7 @@ public class Main {
 
     public static void main(String... args) throws IOException {
 
-        String inp = FileSystem.readFile("resources/semantics.bnf");
+        String inp = readFile("semantics.bnf");
 
         System.out.println("Semantic: ");
         System.out.println(inp);
@@ -35,7 +32,7 @@ public class Main {
         System.out.println(grammar);
 
 
-        inp = FileSystem.readFile("resources/input.txt");
+        inp = readFile("input.txt");
         System.out.println();
         System.out.println("Input: \n" + inp);
 
@@ -54,6 +51,11 @@ public class Main {
             eol.addTerm(Term.createTextTerm(c));
         }
         grammar.addRule(eol);
+    }
+
+    public static String readFile(String name) throws FileNotFoundException {
+        Resources resources = Resources.getInstance();
+        return resources.readFile(name);
     }
 
 }

@@ -1,4 +1,4 @@
-package grammar;
+package com.romanov_v.parser.grammar;
 
 /**
  * Created by vlad on 11/03/16.
