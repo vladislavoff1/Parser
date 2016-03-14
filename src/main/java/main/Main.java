@@ -2,8 +2,7 @@ package main;
 
 import com.romanov_v.parser.*;
 import com.romanov_v.parser.grammar.Grammar;
-import com.romanov_v.parser.grammar.Rule;
-import com.romanov_v.parser.grammar.Term;
+import com.romanov_v.parser.grammar.Grammars;
 
 import java.io.*;
 import java.util.List;
@@ -14,23 +13,29 @@ import java.util.List;
 public class Main {
 
     public static void main(String... args) {
-        String inp = null;
+
+        Resources resources = Resources.getInstance();
+        String inp;
+
+        // Read semantic
         try {
-            inp = readFile("semantics.bnf");
+            inp = resources.readFile("semantics.bnf");
         } catch (FileNotFoundException e) {
             System.out.println("File 'semantic.bnf' not found.");
             return;
         }
 
+        // Parse semantic
         Grammar grammar;
         try {
             grammar = SimpleBnfParser.parse(inp);
-            addBasicRules(grammar);
+            Grammars.addBasicRules(grammar);
         } catch (ParserException e) {
             System.out.println("Parser error (semantic.bnf): " + e.getMessage());
             return;
         }
 
+        // Search undeclared rules in semantic
         List<String> undeclared = grammar.undeclaredRules();
         if (undeclared.size() > 0) {
             for (String ruleName : undeclared) {
@@ -39,13 +44,15 @@ public class Main {
             return;
         }
 
+        // Read input
         try {
-            inp = readFile("input.txt");
+            inp = resources.readFile("input.txt");
         } catch (FileNotFoundException e) {
             System.out.println("File 'input.txt' not found.");
             return;
         }
 
+        // Parse input
         AbstractParser parser = new EarleyParser(grammar, inp);
 
         ParserTree tree;
@@ -55,24 +62,7 @@ public class Main {
             System.out.println("Parser error (input.txt): " + e.getMessage());
             return;
         }
-
         System.out.println(tree);
-    }
-
-    // TODO: put in class Grammars
-    private static void addBasicRules(Grammar grammar) {
-        Rule eol = new Rule("EOL");
-        char[] eolTerms = System.getProperty("line.separator").toCharArray();
-        for (char c : eolTerms) {
-            eol.addTerm(Term.createTextTerm(c));
-        }
-        grammar.addRule(eol);
-    }
-
-    // TODO: inline
-    public static String readFile(String name) throws FileNotFoundException {
-        Resources resources = Resources.getInstance();
-        return resources.readFile(name);
     }
 
 }

@@ -24,6 +24,8 @@ public class EarleyParser extends AbstractParser {
 
     @Override
     public ParserTree parse() throws ParserException {
+
+        // Add state for first rule
         states.add(new ArrayList<>());
 
         if (grammar.getRules().isEmpty()) {
@@ -31,7 +33,6 @@ public class EarleyParser extends AbstractParser {
         }
 
         String firstName = grammar.getRules().get(0).getName();
-
         addFirst(firstName);
 
         for (int i = 0; i < statement.length() + 1; i++) {
@@ -135,22 +136,24 @@ public class EarleyParser extends AbstractParser {
 
     private class State {
 
-        public Rule rule;
-        public int position;
+        private Rule rule;
+        private int position;
 
-        public int origin;
-        public ParserTree tree;
+        private int origin;
+        private ParserTree tree;
+
+        private boolean complete = false;
 
         public State(Rule rule, int position, int origin, ParserTree tree) {
             this.rule = rule;
             this.position = position;
             this.origin = origin;
             this.tree = tree;
+            this.complete = rule.getTerms().length <= position;
         }
 
-        // TODO: optimization
         public boolean isComplete() {
-            return rule.getTerms().length <= position;
+            return complete;
         }
 
         public Term nextTerm() {
