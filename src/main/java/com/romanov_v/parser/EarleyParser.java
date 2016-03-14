@@ -24,6 +24,10 @@ public class EarleyParser extends AbstractParser {
     public ParserTree parse() {
         states.add(new ArrayList<>());
 
+        if (grammar.getRules().isEmpty()) {
+            return null;
+        }
+
         Rule first = grammar.getRules().get(0);
         states.get(0).add(new State(first, 0, 0, new ParserTree(first.getName())));
 
@@ -46,8 +50,8 @@ public class EarleyParser extends AbstractParser {
             }
         }
 
-        for (State state : states.get(statement.length() - 1)) {
-            if (state.rule.getName().equals(first.getName())) {
+        for (State state : states.get(statement.length())) {
+            if (state.isComplete() && state.rule.getName().equals(first.getName())) {
                 return state.tree;
             }
         }
