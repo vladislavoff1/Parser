@@ -11,6 +11,6 @@ public abstract class AbstractParser {
         this.statement = statement;
     }
 
-    public abstract ParserTree parse();
+    public abstract ParserTree parse() throws ParserException;
 
 }

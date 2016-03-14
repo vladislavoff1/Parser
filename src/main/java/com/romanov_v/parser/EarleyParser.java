@@ -23,7 +23,7 @@ public class EarleyParser extends AbstractParser {
     }
 
     @Override
-    public ParserTree parse() {
+    public ParserTree parse() throws ParserException {
         states.add(new ArrayList<>());
 
         if (grammar.getRules().isEmpty()) {
@@ -32,11 +32,7 @@ public class EarleyParser extends AbstractParser {
 
         String firstName = grammar.getRules().get(0).getName();
 
-        for (Rule r : grammar.getRules()) {
-            if (r.getName().equals(firstName)) {
-                states.get(0).add(new State(r, 0, 0, new ParserTree(r.getName())));
-            }
-        }
+        addFirst(firstName);
 
         for (int i = 0; i < statement.length() + 1; i++) {
             states.add(new ArrayList<>());
@@ -57,13 +53,39 @@ public class EarleyParser extends AbstractParser {
             }
         }
 
+        ParserTree result = getResult(firstName);
+
+        if (result == null) {
+            findError();
+        }
+
+        return result;
+    }
+
+    private void findError() throws ParserException {
+        for (int i = 0; i < statement.length(); i++) {
+            if (states.get(i + 1).size() == 0) {
+                throw new ParserException("Unexpected symbol '" + statement.charAt(i) + "'", statement, i);
+            }
+        }
+        throw new ParserException("Unexpected end", statement, statement.length());
+    }
+
+    private ParserTree getResult(String firstName) {
         for (State state : states.get(statement.length())) {
             if (state.isComplete() && state.rule.getName().equals(firstName)) {
                 return state.tree;
             }
         }
-
         return null;
+    }
+
+    private void addFirst(String firstName) {
+        for (Rule r : grammar.getRules()) {
+            if (r.getName().equals(firstName)) {
+                states.get(0).add(new State(r, 0, 0, new ParserTree(r.getName())));
+            }
+        }
     }
 
     private Set<String> added = new HashSet<>();
@@ -126,6 +148,7 @@ public class EarleyParser extends AbstractParser {
             this.tree = tree;
         }
 
+        // TODO: optimization
         public boolean isComplete() {
             return rule.getTerms().length <= position;
         }

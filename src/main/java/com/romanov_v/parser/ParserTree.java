@@ -54,6 +54,22 @@ public class ParserTree {
         return terminal;
     }
 
+    public ParserTree simplify() {
+        if (children.size() == 1) {
+            return children.get(0).simplify();
+        }
+
+        ParserTree result = new ParserTree(this);
+
+        List<ParserTree> children = new ArrayList<>();
+        for (ParserTree child : result.children) {
+            children.add(child.simplify());
+        }
+        result.children = children;
+
+        return result;
+    }
+
     public String toString() {
         return toString("");
     }

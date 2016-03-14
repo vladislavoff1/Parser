@@ -25,7 +25,7 @@ public class ParserException extends Exception {
                 .append(statement)
                 .append("\n");
 
-        for (int i = 0; i < position - 1; i++) {
+        for (int i = 0; i < position; i++) {
             result.append(" ");
         }
 

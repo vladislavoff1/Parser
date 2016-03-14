@@ -36,7 +36,15 @@ public class EarleyParserTest {
         Grammar grammar = new Grammar(rules);
 
         AbstractParser parser = new EarleyParser(grammar, "");
-        assertNull(parser.parse());
+
+        try {
+            parser.parse();
+            assertTrue("ParserException must be thrown", false);
+        } catch (ParserException e) {
+            // all right
+        } catch (Exception e) {
+            assertTrue("ParserException must be thrown", false);
+        }
     }
 
     @Test
@@ -52,13 +60,6 @@ public class EarleyParserTest {
 
         tree = new EarleyParser(grammar, "0").parse();
         assertNotNull(tree);
-
-        tree = new EarleyParser(grammar, "2").parse();
-        assertNull(tree);
-
-        tree = new EarleyParser(grammar, "00").parse();
-        assertNull(tree);
-
     }
 
 }

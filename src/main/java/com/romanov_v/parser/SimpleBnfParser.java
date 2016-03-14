@@ -3,13 +3,8 @@ package com.romanov_v.parser;
 import com.romanov_v.parser.grammar.Grammar;
 import com.romanov_v.parser.grammar.Rule;
 import com.romanov_v.parser.grammar.Term;
-import com.sun.istack.internal.NotNull;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.stream.Collector;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -20,14 +15,12 @@ public class SimpleBnfParser {
     private String statement;
     private int position = 0;
 
-    private boolean debug = false;
-
     private SimpleBnfParser(String statement) {
         this.statement = statement;
     }
 
     // <rule> | <rule> <syntax>
-    public static Grammar parse(@NotNull String statement) throws ParserException {
+    public static Grammar parse(String statement) throws ParserException {
         String[] statements = statement.split("\n");
         List<String> started = Arrays.asList(statements).stream()
                 .map(String::trim)
@@ -72,8 +65,6 @@ public class SimpleBnfParser {
 
     // <opt-whitespace> "<" <rule-name> ">" <opt-whitespace> "::=" <opt-whitespace> <expression> <line-end>
     private List<Rule> rule() throws ParserException {
-        if (debug)
-            System.out.println("rule: " + position + " '" + statement.charAt(position) + "'.");
         // Rule name
         skipWhitespaces();
 
@@ -93,8 +84,6 @@ public class SimpleBnfParser {
 
     // <list> | <list> <opt-whitespace> "|" <opt-whitespace> <expression>
     private List<Rule> list(String name) throws ParserException {
-        if (debug)
-            System.out.println("list: " + position + " '" + statement.charAt(position) + "'.");
         List<Rule> expressions = new ArrayList<>();
         expressions.add(new Rule(name, expression()));
 
@@ -110,8 +99,6 @@ public class SimpleBnfParser {
 
     // <term> | <term> <opt-whitespace> <expression>
     private List<Term> expression() throws ParserException {
-        if (debug)
-            System.out.println("expression: " + position + " '" + statement.charAt(position) + "'.");
         List<Term> expression = new ArrayList<>();
         expression.addAll(term());
 
@@ -126,15 +113,14 @@ public class SimpleBnfParser {
 
     // <literal> | "<" <rule-name> ">"
     private List<Term> term() throws ParserException {
-        if (debug)
-            System.out.println("term: " + position + " '" + statement.charAt(position) + "'.");
         char current = statement.charAt(position);
 
         List<Term> terms = new ArrayList<>();
 
         switch (current) {
             case '<':
-                terms.add(Term.createRuleTerm(getTextBetween('<', '>')));
+                String ruleName = getTextBetween('<', '>');
+                terms.add(Term.createRuleTerm(ruleName));
                 break;
 
             case '"':
@@ -146,8 +132,7 @@ public class SimpleBnfParser {
                 break;
 
             default:
-                position++;
-                throw createParserException("Unexpected symbol: '" + current + "'");
+                throw createParserException("Unexpected symbol '" + current + "'");
         }
 
         return terms;
@@ -155,8 +140,6 @@ public class SimpleBnfParser {
 
     // '"' <text> '"' | "'" <text> "'"
     private String literal() throws ParserException {
-        if (debug)
-            System.out.println("literal: " + position + " '" + statement.charAt(position) + "'.");
         char start = statement.charAt(position);
         return getTextBetween(start, start);
     }
@@ -170,6 +153,7 @@ public class SimpleBnfParser {
         try {
             return statement.charAt(position++);
         } catch (StringIndexOutOfBoundsException e) {
+            position--;
             throw createParserException("Unexpected end");
         }
     }

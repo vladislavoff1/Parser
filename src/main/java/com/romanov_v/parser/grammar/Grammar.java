@@ -1,8 +1,6 @@
 package com.romanov_v.parser.grammar;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -40,5 +38,29 @@ public class Grammar {
         return rules.stream()
                 .filter((rule) -> rule.getName().equals(name))
                 .collect(Collectors.toList());
+    }
+
+    public List<String> undeclaredRules() {
+        Set<String> declaredRules = new HashSet<>();
+        Set<String> usedRules = new HashSet<>();
+
+        for (Rule r : rules) {
+            declaredRules.add(r.getName());
+            for (Term t : r.getTerms()) {
+                if (t.isRule()) {
+                    usedRules.add(t.getValue());
+                }
+            }
+        }
+
+        List<String> result = new ArrayList<>();
+
+        for (String used : usedRules) {
+            if (!declaredRules.contains(used)) {
+                result.add(used);
+            }
+        }
+
+        return result;
     }
 }
