@@ -14,6 +14,13 @@ public class Main {
 
     public static void main(String... args) {
 
+        boolean needSimplify = false;
+        if (args.length > 0) {
+            if (args[0].equals("-s")) {
+                needSimplify = true;
+            }
+        }
+
         Resources resources = Resources.getInstance();
         String inp;
 
@@ -57,7 +64,11 @@ public class Main {
 
         ParserTree tree;
         try {
-            tree = parser.parse().simplify();
+            tree = parser.parse();
+
+            if (needSimplify) {
+                tree = tree.simplify();
+            }
         } catch (ParserException e) {
             System.out.println("Parser error (input.txt): " + e.getMessage());
             return;
