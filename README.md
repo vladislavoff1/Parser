@@ -146,3 +146,7 @@ Parser error (input.txt): Unexpected symbol ')'
 * More tests
 * Improve parsers: `InputStream` instead of `String`
 * Error correction in parsers
+* Add lexer parser
+* Use LL-parser if possible
+
+
