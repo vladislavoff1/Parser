@@ -39,6 +39,8 @@ public class Resources {
                 result.append(line).append("\n");
             }
 
+            result.deleteCharAt(result.length() - 1); // remove last \n
+
             scanner.close();
 
         } catch (IOException e) {

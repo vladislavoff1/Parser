@@ -15,9 +15,11 @@ import java.util.Set;
 public class EarleyParser extends AbstractParser {
 
     private List<List<State>> states = new ArrayList<>();
+    private Grammar grammar;
 
-    public EarleyParser(String statement, Grammar grammar) {
-        super(statement, grammar);
+    public EarleyParser(Grammar grammar, String statement) {
+        super(statement);
+        this.grammar = grammar;
     }
 
     @Override
@@ -31,7 +33,7 @@ public class EarleyParser extends AbstractParser {
         Rule first = grammar.getRules().get(0);
         states.get(0).add(new State(first, 0, 0, new ParserTree(first.getName())));
 
-        for (int i = 0; i < statement.length(); i++) {
+        for (int i = 0; i < statement.length() + 1; i++) {
             states.add(new ArrayList<>());
             added.clear();
 
@@ -41,7 +43,7 @@ public class EarleyParser extends AbstractParser {
                 if (!state.isComplete()) {
                     if (state.nextTerm().isRule()) {
                         predictor(state, i);
-                    } else {
+                    } else if (statement.length() > i){
                         scanner(state, i);
                     }
                 } else {

@@ -19,8 +19,8 @@ public class EarleyParserTest {
     public void emptyGrammar() throws Exception {
         Grammar grammar = new Grammar(new ArrayList<>());
 
-        AbstractParser abstractParserEmpty = new EarleyParser("", grammar);
-        AbstractParser abstractParserNotEmpty = new EarleyParser("123", grammar);
+        AbstractParser abstractParserEmpty = new EarleyParser(grammar, "");
+        AbstractParser abstractParserNotEmpty = new EarleyParser(grammar, "123");
 
         assertNull(abstractParserEmpty.parse());
         assertNull(abstractParserNotEmpty.parse());
@@ -35,12 +35,12 @@ public class EarleyParserTest {
 
         Grammar grammar = new Grammar(rules);
 
-        AbstractParser parser = new EarleyParser("", grammar);
+        AbstractParser parser = new EarleyParser(grammar, "");
         assertNull(parser.parse());
     }
 
     @Test
-    public void oneZeroGrammar() throws Exception {
+    public void oneZero() throws Exception {
         List<Rule> rules = new ArrayList<>();
         Rule start = new Rule("start");
         start.addTerm(Term.createTextTerm("0"));
@@ -48,19 +48,16 @@ public class EarleyParserTest {
 
         Grammar grammar = new Grammar(rules);
 
-        AbstractParser parser;
         ParserTree tree;
 
-        parser = new EarleyParser("0", grammar);
-        tree = parser.parse();
+        tree = new EarleyParser(grammar, "0").parse();
         assertNotNull(tree);
 
-        parser = new EarleyParser("2", grammar);
-        tree = parser.parse();
+        tree = new EarleyParser(grammar, "2").parse();
         assertNull(tree);
 
-        parser = new EarleyParser("00", grammar);
-        assertNull(parser.parse());
+        tree = new EarleyParser(grammar, "00").parse();
+        assertNull(tree);
 
     }
 

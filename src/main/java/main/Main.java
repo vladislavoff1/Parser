@@ -17,26 +17,19 @@ import java.nio.file.Paths;
  */
 public class Main {
 
-    public static void main(String... args) throws IOException {
+    public static void main(String... args) throws Exception {
 
         String inp = readFile("semantics.bnf");
 
-        System.out.println("Semantic: ");
-        System.out.println(inp);
-
-        System.out.println();
-        System.out.println("Parsed semantic: ");
-
         Grammar grammar = SimpleBnfParser.parse(inp);
         addBasicRules(grammar);
-        System.out.println(grammar);
 
 
         inp = readFile("input.txt");
         System.out.println();
         System.out.println("Input: \n" + inp);
 
-        AbstractParser parser = new EarleyParser(inp, grammar);
+        AbstractParser parser = new EarleyParser(grammar, inp);
         ParserTree tree = parser.parse();
 
         System.out.println();
