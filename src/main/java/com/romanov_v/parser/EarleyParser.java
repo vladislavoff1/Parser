@@ -37,7 +37,9 @@ public class EarleyParser extends AbstractParser {
 
         for (int i = 0; i < statement.length() + 1; i++) {
             states.add(new ArrayList<>());
-            added.clear();
+            if (i != 0) {
+                added.clear();
+            }
 
             List<State> list = states.get(i);
             for (int j = 0; j < list.size(); j++) {
@@ -74,7 +76,7 @@ public class EarleyParser extends AbstractParser {
 
     private ParserTree getResult(String firstName) {
         for (State state : states.get(statement.length())) {
-            if (state.isComplete() && state.rule.getName().equals(firstName)) {
+            if (state.isComplete() && state.origin == 0 && state.rule.getName().equals(firstName)) {
                 return state.tree;
             }
         }
@@ -87,6 +89,7 @@ public class EarleyParser extends AbstractParser {
                 states.get(0).add(new State(r, 0, 0, new ParserTree(r.getName())));
             }
         }
+        added.add(firstName);
     }
 
     private Set<String> added = new HashSet<>();
