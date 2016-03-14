@@ -142,7 +142,7 @@ Parser error (input.txt): Unexpected symbol ')'
 * Input files names in `args`
 * Parse `semantic` by `EarleyParser` (not special parser)
 * Improve BNF: parse that rules like `<number> ::= ["-"] <positive>`
-* Save to file `Grammar`. Split `semantic` and `input` parsing
+* Save `Grammar` to file. Split `semantic` and `input` parsing
 * More tests
 * Improve parsers: `InputStream` instead of `String`
 * Error correction in parsers
