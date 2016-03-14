@@ -26,7 +26,6 @@ public class EarleyParser extends AbstractParser {
 
         Rule first = grammar.getRules().get(0);
         states.get(0).add(new State(first, 0, 0, new ParserTree(first.getName())));
-        statement += "#";
 
         for (int i = 0; i < statement.length(); i++) {
             states.add(new ArrayList<>());
@@ -76,7 +75,7 @@ public class EarleyParser extends AbstractParser {
 
     private void scanner(State state, int origin) {
         char next = state.nextTerm().getValue().charAt(0);
-        
+
         if (next == statement.charAt(origin)) {
             ParserTree tree = new ParserTree(state.tree);
             tree.addChild(new ParserTree(next + "", true));

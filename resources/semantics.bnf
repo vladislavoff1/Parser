@@ -1,26 +1,6 @@
-<start>          ::= <syntax>
-<syntax>         ::= <rule> | <rule> <syntax>
-<rule>           ::= <opt-whitespace> "<" <rule-name> ">" <opt-whitespace> "::=" <opt-whitespace> <expression> <line-end>
-<rule>           ::=  "<" <rule-name> ">" <opt-whitespace> "::=" <opt-whitespace> <expression> <line-end>
-<rule>           ::= <opt-whitespace> "<" <rule-name> ">"  "::=" <opt-whitespace> <expression> <line-end>
-<rule>           ::= <opt-whitespace> "<" <rule-name> ">" <opt-whitespace> "::="  <expression> <line-end>
-<rule>           ::=  "<" <rule-name> ">" "::=" <opt-whitespace> <expression> <line-end>
-<rule>           ::= <opt-whitespace> "<" <rule-name> ">" "::=" <expression> <line-end>
-<rule>           ::= "<" <rule-name> ">" <opt-whitespace> "::="  <expression> <line-end>
-<rule>           ::=  "<" <rule-name> ">" "::="  <expression> <line-end>
-<opt-whitespace> ::= " " <opt-whitespace> | " "
-<expression>     ::= <list> | <list> <opt-whitespace> "|" <opt-whitespace> <expression>
-<expression>     ::= <list> | <list> "|" <opt-whitespace> <expression>
-<expression>     ::= <list> | <list> <opt-whitespace> "|" <expression>
-<expression>     ::= <list> | <list> "|" <expression>
-<line-end>       ::= <opt-whitespace> <EOL> | <line-end> <opt-whitespace> <EOL>
-<line-end>       ::= <EOL> | <line-end> <EOL>
-<list>           ::= <term> | <term> <opt-whitespace> <list>
-<list>           ::= <term> | <term> <list>
-<term>           ::= <literal> | "<" <rule-name> ">"
-<literal>        ::= '"' <rule-name> '"' | "'" <rule-name> "'"
-<rule-name>      ::= <name> <rule-name> | <name>
-<name>           ::= <letter> | <digit> | "_"
-<letter>         ::= "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z" | "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z"
-<digit>          ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
-<symbol>         ::= "[" | "]" | "{" | "}" | "(" | ")" | "<" | ">" | "'" | '"' | "=" | "|" | "." | "," | ";"
+<start> ::= <выражение>
+<выражение> ::= <выражение> "+" <слагаемое> | <выражение> "-" <слагаемое> | <слагаемое>
+<слагаемое> ::= <слагаемое> "*" <множитель> |  <слагаемое> "/" <множитель> | <множитель>
+<множитель> ::= <число> | "(" <выражение> ")"
+<число> ::= <цифра> <число> | <цифра>
+<цифра> ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
